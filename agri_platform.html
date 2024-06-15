@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AgriSmart - Agricultural Productivity Platform</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #2E7D32 0%, #4CAF50 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2E7D32;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #2E7D32;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .hero {
+            text-align: center;
+            color: white;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+        }
+
+        .weather-icon { background: linear-gradient(135deg, #64B5F6, #42A5F5); }
+        .soil-icon { background: linear-gradient(135deg, #8D6E63, #6D4C41); }
+        .market-icon { background: linear-gradient(135deg, #FFB74D, #FF9800); }
+        .ai-icon { background: linear-gradient(135deg, #BA68C8, #9C27B0); }
+
+        .card h3 {
+            color: #2E7D32;
+            font-size: 1.3rem;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        .status.good {
+            background: #E8F5E8;
+            color: #2E7D32;
+        }
+
+        .status.warning {
+            background: #FFF3E0;
+            color: #FF9800;
+        }
+
+        .status.critical {
+            background: #FFEBEE;
+            color: #F44336;
+        }
+
+        .recommendation-item {
+            background: #F1F8E9;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .crop-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .crop-item {
+            text-align: center;
+            padding: 1rem;
+            background: #F8F9FA;
+            border-radius: 12px;
+            transition: transform 0.2s ease;
+        }
+
+        .crop-item:hover {
+            transform: scale(1.05);
+            background: #E8F5E8;
+        }
+
+        .crop-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45A049);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .weather-forecast {
+            display: flex;
+            gap: 1rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .forecast-day {
+            min-width: 100px;
+            text-align: center;
+            padding: 1rem;
+            background: #F8F9FA;
+            border-radius: 12px;
+        }
+
+        .forecast-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .temperature {
+            font-weight: bold;
+            color: #2E7D32;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 20px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                🌱 AgriSmart
+            </div>
+            <ul class="nav-links">
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#weather">Weather</a></li>
+                <li><a href="#soil">Soil Health</a></li>
+                <li><a href="#market">Market</a></li>
+                <li><a href="#ai">AI Insights</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <section class="hero">
+            <h1>Smart Farming for Kenya</h1>
+            <p>Empowering smallholder farmers with AI-driven insights, real-time data, and modern agricultural techniques to boost productivity and income.</p>
+        </section>
+
+        <div class="dashboard" id="dashboard">
+            <!-- Weather Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon weather-icon">🌤️</div>
+                    <h3>Weather Forecast</h3>
+                </div>
+                <div class="weather-forecast">
+                    <div class="forecast-day">
+                        <div class="forecast-icon">☀️</div>
+                        <div>Today</div>
+                        <div class="temperature">28°C</div>
+                        <div style="font-size: 0.8rem; color: #666;">Clear</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="forecast-icon">🌦️</div>
+                        <div>Tomorrow</div>
+                        <div class="temperature">25°C</div>
+                        <div style="font-size: 0.8rem; color: #666;">Rain</div>
+                    </div>
+                    <div class="forecast-day">
+                        <div class="forecast-icon">⛅</div>
+                        <div>Fri</div>
+                        <div class="temperature">26°C</div>
+                        <div style="font-size: 0.8rem; color: #666;">Cloudy</div>
+                    </div>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Humidity</span>
+                    <span class="metric-value">68%</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Rainfall Expected</span>
+                    <span class="metric-value">15mm</span>
+                </div>
+                <button class="btn" onclick="openModal('weatherModal')">View Detailed Forecast</button>
+            </div>
+
+            <!-- Soil Health Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon soil-icon">🏔️</div>
+                    <h3>Soil Health Analytics</h3>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">pH Level</span>
+                    <span class="metric-value">6.2 <span class="status good">Good</span></span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Nitrogen (N)</span>
+                    <span class="metric-value">45 ppm <span class="status warning">Low</span></span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Phosphorus (P)</span>
+                    <span class="metric-value">28 ppm <span class="status good">Good</span></span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Potassium (K)</span>
+                    <span class="metric-value">120 ppm <span class="status good">Good</span></span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Moisture</span>
+                    <span class="metric-value">35% <span class="status warning">Dry</span></span>
+                </div>
+                <button class="btn" onclick="openModal('soilModal')">Get Soil Report</button>
+            </div>
+
+            <!-- Market Prices Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon market-icon">📈</div>
+                    <h3>Market Prices (Nairobi)</h3>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Maize (90kg bag)</span>
+                    <span class="metric-value">KSh 3,200 📈</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Beans (90kg bag)</span>
+                    <span class="metric-value">KSh 8,500 📉</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Tomatoes (Crate)</span>
+                    <span class="metric-value">KSh 1,800 📈</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Potatoes (90kg bag)</span>
+                    <span class="metric-value">KSh 2,800 ➡️</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Onions (90kg bag)</span>
+                    <span class="metric-value">KSh 4,200 📈</span>
+                </div>
+                <button class="btn" onclick="openModal('marketModal')">View Market Trends</button>
+            </div>
+
+            <!-- AI Recommendations Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon ai-icon">🤖</div>
+                    <h3>AI Recommendations</h3>
+                </div>
+                <div class="recommendation-item">
+                    <strong>🌽 Crop Recommendation:</strong>
+                    <p>Based on soil analysis and weather patterns, consider planting drought-resistant maize varieties for the upcoming season.</p>
+                </div>
+                <div class="recommendation-item">
+                    <strong>💧 Irrigation Schedule:</strong>
+                    <p>Increase irrigation frequency by 20% this week due to low soil moisture and high temperatures.</p>
+                </div>
+                <div class="recommendation-item">
+                    <strong>🧪 Fertilizer Advice:</strong>
+                    <p>Apply nitrogen-rich fertilizer (DAP) at 50kg/acre to address nitrogen deficiency in your soil.</p>
+                </div>
+                <button class="btn" onclick="openModal('aiModal')">Get Personalized Plan</button>
+            </div>
+
+            <!-- Recommended Crops Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #81C784, #66BB6A);">🌾</div>
+                    <h3>Recommended Crops</h3>
+                </div>
+                <div class="crop-grid">
+                    <div class="crop-item">
+                        <div class="crop-icon">🌽</div>
+                        <div>Maize</div>
+                        <div style="font-size: 0.8rem; color: #666;">High demand</div>
+                    </div>
+                    <div class="crop-item">
+                        <div class="crop-icon">🍅</div>
+                        <div>Tomatoes</div>
+                        <div style="font-size: 0.8rem; color: #666;">Good prices</div>
+                    </div>
+                    <div class="crop-item">
+                        <div class="crop-icon">🥔</div>
+                        <div>Potatoes</div>
+                        <div style="font-size: 0.8rem; color: #666;">Stable market</div>
+                    </div>
+                    <div class="crop-item">
+                        <div class="crop-icon">🫘</div>
+                        <div>Beans</div>
+                        <div style="font-size: 0.8rem; color: #666;">Export ready</div>
+                    </div>
+                </div>
+                <button class="btn" onclick="openModal('cropsModal')">View Crop Calendar</button>
+            </div>
+
+            <!-- Farm Analytics Card -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon" style="background: linear-gradient(135deg, #64B5F6, #42A5F5);">📊</div>
+                    <h3>Farm Analytics</h3>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">This Season's Yield</span>
+                    <span class="metric-value">2.1 tons/acre</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Previous Season</span>
+                    <span class="metric-value">1.8 tons/acre</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Improvement</span>
+                    <span class="metric-value">+16.7% 📈</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">Revenue Projection</span>
+                    <span class="metric-value">KSh 67,200</span>
+                </div>
+                <div class="metric">
+                    <span class="metric-label">ROI</span>
+                    <span class="metric-value">145%</span>
+                </div>
+                <button class="btn" onclick="openModal('analyticsModal')">View Full Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="weatherModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('weatherModal')">&times;</span>
+            <h3>7-Day Weather Forecast</h3>
+            <p><strong>Location:</strong> Machakos County, Kenya</p>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🌧️ Rain Alert</h4>
+                <p>Heavy rainfall expected tomorrow (15-25mm). Consider:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Delaying fertilizer application</li>
+                    <li>Checking drainage systems</li>
+                    <li>Harvesting mature crops if possible</li>
+                </ul>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>☀️ Weekly Summary</h4>
+                <p>Average temperature: 26°C<br>
+                Total rainfall: 45mm<br>
+                Humidity: 65-75%<br>
+                Wind: 8-12 km/h</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="soilModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('soilModal')">&times;</span>
+            <h3>Detailed Soil Analysis Report</h3>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🧪 Nutrient Analysis</h4>
+                <p><strong>Nitrogen Deficiency Detected:</strong></p>
+                <p>Your soil nitrogen levels (45 ppm) are below optimal (60-80 ppm). This may result in:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Slower plant growth</li>
+                    <li>Yellowing of leaves</li>
+                    <li>Reduced yield by up to 20%</li>
+                </ul>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>💡 Recommendations</h4>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Apply DAP fertilizer at 50kg per acre</li>
+                    <li>Consider organic compost application</li>
+                    <li>Plant nitrogen-fixing legumes in rotation</li>
+                    <li>Re-test soil in 4-6 weeks</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="marketModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('marketModal')">&times;</span>
+            <h3>Market Analysis & Trends</h3>
+            
+            <div style="margin: 1rem 0;">
+                <h4>📈 Price Trends (Last 30 days)</h4>
+                <p><strong>Maize:</strong> +12% increase due to export demand<br>
+                <strong>Tomatoes:</strong> +8% increase, peak season pricing<br>
+                <strong>Beans:</strong> -5% decrease, market oversupply<br>
+                <strong>Onions:</strong> +15% increase, storage shortage</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🎯 Trading Opportunities</h4>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Maize: High demand from millers, consider selling</li>
+                    <li>Tomatoes: Peak prices expected next week</li>
+                    <li>Hold beans for post-harvest season (3 months)</li>
+                    <li>Onions: Immediate sale recommended</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="aiModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('aiModal')">&times;</span>
+            <h3>AI-Powered Farming Plan</h3>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🎯 30-Day Action Plan</h4>
+                <p><strong>Week 1:</strong> Apply nitrogen fertilizer, prepare seedbeds<br>
+                <strong>Week 2:</strong> Plant maize and tomatoes, install drip irrigation<br>
+                <strong>Week 3:</strong> First weeding, pest monitoring<br>
+                <strong>Week 4:</strong> Soil moisture check, supplementary irrigation</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🤖 AI Insights</h4>
+                <p>Based on your 2-acre farm data:</p>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Projected yield increase: 18-25%</li>
+                    <li>Water usage optimization: -30%</li>
+                    <li>Input cost reduction: 15%</li>
+                    <li>Expected ROI: 165%</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="cropsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('cropsModal')">&times;</span>
+            <h3>Seasonal Crop Calendar</h3>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🌦️ Long Rains Season (Mar-Jul)</h4>
+                <p><strong>Plant:</strong> Maize, beans, sorghum, millet<br>
+                <strong>Harvest:</strong> Previous season crops</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>☀️ Dry Season (Aug-Oct)</h4>
+                <p><strong>Plant:</strong> Drought-resistant varieties, vegetables<br>
+                <strong>Activities:</strong> Soil preparation, equipment maintenance</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🌧️ Short Rains Season (Nov-Feb)</h4>
+                <p><strong>Plant:</strong> Fast-maturing varieties, vegetables<br>
+                <strong>Focus:</strong> Quick turnaround crops</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="analyticsModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('analyticsModal')">&times;</span>
+            <h3>Comprehensive Farm Analytics</h3>
+            
+            <div style="margin: 1rem 0;">
+                <h4>📊 Performance Metrics</h4>
+                <p><strong>Yield Efficiency:</strong> 87% of potential<br>
+                <strong>Water Use Efficiency:</strong> 2.1 kg/m³<br>
+                <strong>Input Cost Ratio:</strong> 35% of revenue<br>
+                <strong>Labor Productivity:</strong> +23% vs. last season</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>💰 Financial Summary</h4>
+                <p><strong>Total Investment:</strong> KSh 28,500<br>
+                <strong>Projected Revenue:</strong> KSh 67,200<br>
+                <strong>Net Profit:</strong> KSh 38,700<br>
+                <strong>Break-even:</strong> Month 4</p>
+            </div>
+            
+            <div style="margin: 1rem 0;">
+                <h4>🎯 Improvement Areas</h4>
+                <ul style="margin-left: 1.5rem;">
+                    <li>Reduce pest damage by 8% with IPM</li>
+                    <li>Optimize irrigation scheduling</li>
+                    <li>Consider precision agriculture tools</li>
+                    <li>Explore value addition opportunities</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulate real-time data updates
+        function updateWeatherData() {
+            const temps = [25, 26, 27, 28, 29, 30];
+            const humidity = [65, 68, 70, 72, 75];
+            
+            const currentTemp = temps[Math.floor(Math.random() * temps.length)];
+            const currentHumidity = humidity[Math.floor(Math.random() * humidity.length)];
+            
+            // Update temperature display
+            document.querySelector('.temperature').textContent = currentTemp + '°C';
+            document.querySelector('.metric-value').textContent = currentHumidity + '%';
+        }
+
+        // Simulate market price fluctuations
+        function updateMarketPrices() {
+            const priceElements = document.querySelectorAll('.metric-value');
+            const fluctuation = () => Math.random() > 0.5 ? '📈' : '📉';
+            
+            priceElements.forEach((element, index) => {
+                if (element.textContent.includes('KSh')) {
+                    const currentPrice = parseInt(element.textContent.match(/\d+/)[0]);
+                    const change = Math.floor(Math.random() * 200) - 100;
+                    const newPrice = Math.max(currentPrice + change, 1000);
+                    element.innerHTML = `KSh ${newPrice.toLocaleString()} ${fluctuation()}`;
+                }
+            });
+        }
+
+        // Modal functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('active');
+            }
+        });
+
+        // Simulate soil moisture updates
+        function updateSoilData() {
+            const moistureLevels = ['25% (Critical)', '35% (Dry)', '45% (Good)', '55% (Optimal)'];
+            const statuses = ['critical', 'warning', 'good', 'good'];
+            
+            const randomIndex = Math.floor(Math.random() * moistureLevels.length);
+            const moistureElement = document.querySelector('.metric:last-child .metric-value');
+            
+            if (moistureElement && moistureElement.textContent.includes('%')) {
+                const statusElement = moistureElement.querySelector('.status');
+                moistureElement.innerHTML = `${moistureLevels[randomIndex]} <span class="status ${statuses[randomIndex]}">${statuses[randomIndex].charAt(0).toUpperCase() + statuses[randomIndex].slice(1)}</span>`;
+            }
+        }
+
+        // Initialize periodic updates
+        setInterval(updateWeatherData, 30000); // Update every 30 seconds
+        setInterval(updateMarketPrices, 60000); // Update every minute
+        setInterval(updateSoilData, 45000); // Update every 45 seconds
+
+        // Smooth scrolling for navigation
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add loading animation for buttons
+        document.querySelectorAll('.btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const originalText = this.textContent;
+                this.textContent = 'Loading...';
+                this.disabled = true;
+                
+                setTimeout(() => {
+                    this.textContent = originalText;
+                    this.disabled = false;
+                }, 1500);
+            });
+        });
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('AgriSmart Platform Initialized');
+            
+            // Add entrance animations
+            const cards = document.querySelectorAll('.card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+            
+            // Simulate real-time notifications
+            showNotification('Welcome to AgriSmart! Your farm data is being updated.', 'success');
+            
+            setTimeout(() => {
+                showNotification('Weather alert: Rain expected tomorrow. Check irrigation schedule.', 'warning');
+            }, 5000);
+        });
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            // Create notification container if it doesn't exist
+            let container = document.querySelector('.notification-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.className = 'notification-container';
+                container.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 10000;
+                    max-width: 400px;
+                `;
+                document.body.appendChild(container);
+            }
+            
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.style.cssText = `
+                background: ${type === 'success' ? '#4CAF50' : type === 'warning' ? '#FF9800' : '#2196F3'};
+                color: white;
+                padding: 1rem;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                transform: translateX(100%);
+                transition: transform 0.3s ease;
+                cursor: pointer;
+            `;
+            notification.textContent = message;
+            
+            container.appendChild(notification);
+            
+            // Animate in
+            setTimeout(() => {
+                notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            }, 5000);
+            
+            // Click to dismiss
+            notification.addEventListener('click', () => {
+                notification.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                }, 300);
+            });
+        }
+
+        // Advanced crop recommendation system
+        function generateCropRecommendations() {
+            const soilPH = 6.2;
+            const moisture = 35;
+            const season = 'long-rains';
+            const marketPrices = {
+                maize: 3200,
+                beans: 8500,
+                tomatoes: 1800,
+                potatoes: 2800
+            };
+            
+            let recommendations = [];
+            
+            if (soilPH >= 6.0 && soilPH <= 7.0) {
+                recommendations.push({
+                    crop: 'Maize',
+                    reason: 'Optimal pH range for maize production',
+                    expectedYield: '2.5 tons/acre',
+                    profitability: 'High'
+                });
+            }
+            
+            if (moisture < 40) {
+                recommendations.push({
+                    crop: 'Drought-resistant Sorghum',
+                    reason: 'Low soil moisture detected',
+                    expectedYield: '1.8 tons/acre',
+                    profitability: 'Medium'
+                });
+            }
+            
+            if (marketPrices.tomatoes < 2000) {
+                recommendations.push({
+                    crop: 'Tomatoes',
+                    reason: 'Favorable market prices',
+                    expectedYield: '15 tons/acre',
+                    profitability: 'Very High'
+                });
+            }
+            
+            return recommendations;
+        }
+
+        // Weather prediction system
+        function generateWeatherPrediction() {
+            const predictions = [
+                { day: 'Today', temp: 28, condition: '☀️', rain: 0 },
+                { day: 'Tomorrow', temp: 25, condition: '🌦️', rain: 15 },
+                { day: 'Day 3', temp: 26, condition: '⛅', rain: 5 },
+                { day: 'Day 4', temp: 29, condition: '☀️', rain: 0 },
+                { day: 'Day 5', temp: 27, condition: '🌤️', rain: 2 },
+                { day: 'Day 6', temp: 24, condition: '🌧️', rain: 20 },
+                { day: 'Day 7', temp: 26, condition: '⛅', rain: 8 }
+            ];
+            
+            return predictions;
+        }
+
+        // Farm analytics calculator
+        function calculateFarmAnalytics(farmData) {
+            const {
+                acres = 2,
+                currentYield = 2.1,
+                previousYield = 1.8,
+                pricePerTon = 32000,
+                inputCosts = 28500
+            } = farmData;
+            
+            const totalRevenue = currentYield * acres * pricePerTon;
+            const netProfit = totalRevenue - inputCosts;
+            const roi = ((netProfit / inputCosts) * 100).toFixed(1);
+            const yieldImprovement = (((currentYield - previousYield) / previousYield) * 100).toFixed(1);
+            
+            return {
+                totalRevenue,
+                netProfit,
+                roi,
+                yieldImprovement,
+                profitPerAcre: netProfit / acres
+            };
+        }
+
+        // Market trend analyzer
+        function analyzeMarketTrends() {
+            const trends = {
+                maize: { current: 3200, trend: 'up', change: 12 },
+                beans: { current: 8500, trend: 'down', change: -5 },
+                tomatoes: { current: 1800, trend: 'up', change: 8 },
+                potatoes: { current: 2800, trend: 'stable', change: 0 },
+                onions: { current: 4200, trend: 'up', change: 15 }
+            };
+            
+            return trends;
+        }
+
+        // Soil health monitor
+        function monitorSoilHealth() {
+            const soilData = {
+                ph: 6.2,
+                nitrogen: 45,
+                phosphorus: 28,
+                potassium: 120,
+                moisture: 35,
+                organicMatter: 3.2,
+                recommendations: [
+                    'Apply DAP fertilizer for nitrogen boost',
+                    'Increase irrigation frequency',
+                    'Consider organic compost addition',
+                    'Monitor pH levels monthly'
+                ]
+            };
+            
+            return soilData;
+        }
+
+        // Irrigation scheduler
+        function createIrrigationSchedule(cropType, soilMoisture, weather) {
+            const schedule = [];
+            const currentMoisture = soilMoisture || 35;
+            const rainForecast = weather?.rain || 0;
+            
+            if (currentMoisture < 40 && rainForecast < 10) {
+                schedule.push({
+                    date: 'Today',
+                    action: 'Irrigate',
+                    duration: '2 hours',
+                    amount: '25mm equivalent'
+                });
+            }
+            
+            schedule.push({
+                date: 'Day 3',
+                action: 'Check soil moisture',
+                duration: 'N/A',
+                amount: 'Visual inspection'
+            });
+            
+            if (rainForecast > 15) {
+                schedule.push({
+                    date: 'Tomorrow',
+                    action: 'Skip irrigation',
+                    duration: 'N/A',
+                    amount: 'Rain expected'
+                });
+            }
+            
+            return schedule;
+        }
+
+        // Export functionality for GitHub showcase
+        function exportFarmData() {
+            const farmData = {
+                timestamp: new Date().toISOString(),
+                weather: generateWeatherPrediction(),
+                soil: monitorSoilHealth(),
+                market: analyzeMarketTrends(),
+                crops: generateCropRecommendations(),
+                analytics: calculateFarmAnalytics({})
+            };
+            
+            console.log('Farm Data Export:', farmData);
+            showNotification('Farm data exported to console. Check developer tools.', 'success');
+            return farmData;
+        }
+
+        // Add export button functionality
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'e') {
+                e.preventDefault();
+                exportFarmData();
+            }
+        });
+
+        // Performance monitoring
+        function monitorPerformance() {
+            const metrics = {
+                pageLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
+                domContentLoaded: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
+                userAgent: navigator.userAgent,
+                viewport: {
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                }
+            };
+            
+            console.log('Performance Metrics:', metrics);
+            return metrics;
+        }
+
+        // Initialize performance monitoring
+        window.addEventListener('load', monitorPerformance);
+        
+        // Responsive design handler
+        function handleResponsiveLayout() {
+            const isMobile = window.innerWidth < 768;
+            const cards = document.querySelectorAll('.card');
+            
+            if (isMobile) {
+                cards.forEach(card => {
+                    card.style.margin = '0 0 1rem 0';
+                });
+            }
+        }
+        
+        window.addEventListener('resize', handleResponsiveLayout);
+        handleResponsiveLayout(); // Initial call
+    </script>
+</body>
+</html>
