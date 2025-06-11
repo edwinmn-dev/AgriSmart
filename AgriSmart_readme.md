@@ -42,4 +42,4 @@
 
 MIT License
 
-edwinmn.dev-gmail.com
+edwinmn.dev@gmail.com
